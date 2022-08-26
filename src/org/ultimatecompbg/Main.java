@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Main extends Thread {
     private int end;
     private int counter;
-    private Object lock = new Object();
+    private static Object lock = new Object();
 
     public void setStart(int newStart){
         counter = newStart;
@@ -30,7 +30,7 @@ public class Main extends Thread {
             }
         }
     }
-    public static void main(String[] args){
+    public static void main(String[] args) throws InterruptedException {
 
         Main thread = new Main();
         Scanner firstStart = new Scanner(System.in);
@@ -42,8 +42,13 @@ public class Main extends Thread {
         Main thread2 = new Main();
         thread2.setStart(secondStart.nextInt());
         thread2.setEnd(secondEnd.nextInt());
-        thread.start();
-        thread2.start();
+        synchronized (lock){
+            thread.start();
+            thread.wait();
+            thread2.start();
+            thread2.wait();
+        }
+
 
        /* while(true){
             if(!thread.isAlive()){
