@@ -2,18 +2,33 @@ package org.ultimatecompbg;
 
 
 import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class Main extends Thread {
     private int end;
     private int counter;
+    private Object lock = new Object();
 
     public void setStart(int newStart){
         counter = newStart;
     }
     public void setEnd(int newEnd){
         end = newEnd;
+    }
+    public void count(){
+        synchronized (lock){
+            while(counter < end){
+                try{
+
+                    sleep(100);
+                    counter++;
+                    System.out.printf("%s : %s%n", Thread.currentThread().getName(), counter);
+                    lock.notify();
+                }
+                catch(Exception e) {
+
+                }
+            }
+        }
     }
     public static void main(String[] args){
 
@@ -27,10 +42,10 @@ public class Main extends Thread {
         Main thread2 = new Main();
         thread2.setStart(secondStart.nextInt());
         thread2.setEnd(secondEnd.nextInt());
-        ExecutorService threadPool = Executors.newSingleThreadExecutor(Executors.defaultThreadFactory());
         thread.start();
         thread2.start();
-        while(true){
+
+       /* while(true){
             if(!thread.isAlive()){
                 thread2.interrupt();
                 break;
@@ -39,22 +54,11 @@ public class Main extends Thread {
                 break;
             }
 
-        }
+        }*/
 
     }
 
     public void run() {
-
-
-        while(counter < end){
-            try{
-                Thread.sleep(1000);
-            }
-            catch(Exception e) {
-                break;
-            }
-            counter++;
-            System.out.printf("%s : %s%n", Thread.currentThread().getName(), counter);
-        }
+            count();
     }
 }
