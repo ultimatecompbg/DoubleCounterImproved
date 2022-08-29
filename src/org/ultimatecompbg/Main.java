@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Main extends Thread {
     private int end;
     private int counter;
-    private static Object lock = new Object();
+    private final Object lock = new Object();
 
     public void setStart(int newStart){
         counter = newStart;
