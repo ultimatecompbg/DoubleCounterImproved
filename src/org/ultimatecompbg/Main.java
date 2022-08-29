@@ -23,12 +23,12 @@ public class Main extends Thread {
                     lock.notify();
                 }
                 catch(Exception e) {
-
+                    System.out.println("interrupted exception");
                 }
 
         }
     }
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
 
         Main thread = new Main();
         Scanner firstStart = new Scanner(System.in);
@@ -54,7 +54,7 @@ public class Main extends Thread {
 
                 }
                 catch(InterruptedException e){
-
+                    System.out.println("interrupted exception");
                 }
             }
 
