@@ -16,9 +16,7 @@ public class Main extends Thread {
     }
     public void count(){
         synchronized (lock){
-            while(counter < end){
                 try{
-
                     sleep(100);
                     counter++;
                     System.out.printf("%s : %s%n", Thread.currentThread().getName(), counter);
@@ -27,7 +25,7 @@ public class Main extends Thread {
                 catch(Exception e) {
 
                 }
-            }
+
         }
     }
     public static void main(String[] args) throws InterruptedException {
@@ -42,28 +40,27 @@ public class Main extends Thread {
         Main thread2 = new Main();
         thread2.setStart(secondStart.nextInt());
         thread2.setEnd(secondEnd.nextInt());
-        synchronized (lock){
-            thread.start();
-            thread.wait();
-            thread2.start();
-            thread2.wait();
-        }
-
-
-       /* while(true){
-            if(!thread.isAlive()){
-                thread2.interrupt();
-                break;
-            }else if(!thread2.isAlive()){
-                thread.interrupt();
-                break;
-            }
-
-        }*/
+        thread.start();
+        thread2.start();
 
     }
 
     public void run() {
-            count();
+        while(counter < end){
+            synchronized(lock) {
+                try{
+                    count();
+                    lock.wait();
+
+                }
+                catch(InterruptedException e){
+
+                }
+            }
+
+
+        }
+
+
     }
 }
